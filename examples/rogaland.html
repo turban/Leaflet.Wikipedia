@@ -5,8 +5,8 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<!--<meta property="og:image" content="route.png" />-->
-	<link rel="stylesheet" href="../lib/leaflet/leaflet.css" />
-	<link rel="stylesheet" href="../lib/sidebar/L.Control.Sidebar.css" />	
+	<link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+	<link rel="stylesheet" href="lib/sidebar/L.Control.Sidebar.css" />	
 	<style>
 		html, body, #map { margin: 0; height: 100%; background: #fff; }
 		.leaflet-sidebar img { float: right; padding: 0 0 10px 10px; }
@@ -16,10 +16,10 @@
 
     <div id="sidebar"></div>
 	<div id="map"></div>
-	<script src="../lib/reqwest.min.js"></script>			
-	<script src="../lib/leaflet/leaflet.js"></script>	
-	<script src="../lib/sidebar/L.Control.Sidebar.js"></script>	
-	<script src="../Leaflet.Wikipedia.js"></script>
+	<script src="lib/reqwest.min.js"></script>			
+	<script src="lib/leaflet/leaflet.js"></script>	
+	<script src="lib/sidebar/L.Control.Sidebar.js"></script>	
+	<script src="../src/Leaflet.Wikipedia.js"></script>
 	<script>
 
 	var map = L.map('map', {
@@ -37,25 +37,22 @@
 		attribution: '&copy; <a href="http://kartverket.no/">Kartverket</a>'
 	}).addTo(map);
 
-	//var template = '<h2>{label}</h2><p><img src="{thumbnail}">{abstract}</p>';
-	var template = '<h2>{label}</h2><p>{abstract}</p>';	
+	var template = '<h2>{label}</h2><p><img src="{thumbnail}">{abstract}</p><p><a href="{link}">Read on Wikipedia</a></p>';
 
 	L.wikipedia({
 		query: {
-			fields: ['label', 'lat', 'lng'],
-			bounds: [[59.041, 4.136], [59.731, 7.809]],
-			language: 'de'
+			fields: ['label', 'lat', 'lng', 'abstract', 'link', 'thumbnail'],
+			bounds: map.getBounds()
 		},
 		marker: {
-			icon: L.icon({
-			    iconUrl: 'wikipedia_16.png',
-			    iconRetinaUrl: 'wikipedia_32.png',
+			icon: L.icon({ // Icons from http://www.icondrawer.com/social-icons.php
+			    iconUrl: 'img/wikipedia_16.png',
+			    iconRetinaUrl: 'img/wikipedia_32.png',
 			    iconSize: [16, 16]
 			})
 		}
 	}).addTo(map).on('click', function(evt) { 
-		var marker = evt.layer;
-		sidebar.setContent(L.Util.template(template, marker.data)).show();
+		sidebar.setContent(L.Util.template(template, evt.layer.data)).show();
 	});
 
 	</script>
